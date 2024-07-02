@@ -47,7 +47,7 @@ func countDigit(n int) int {
 
 func isPrime(n int) bool {
 	for i := 2; i < n/2; i++ {
-		if n%2 == 0 {
+		if n%i == 0 {
 			//set return & ketemu kondisi, akan keluar dari looping
 			return false
 		}
