@@ -1,0 +1,17 @@
+@startuml quiz
+
+entity regions{
+    region_id serial <<pk>>
+    region_name varchar(15)
+}
+
+entity countries{
+    country_id serial <<pk>>
+    country_name varchar(15) <<unique>>
+    --
+    region_id <<fk>>
+}
+
+regions ||-o{ countries
+
+@enduml
