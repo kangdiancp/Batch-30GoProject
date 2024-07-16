@@ -1,0 +1,121 @@
+@startuml northwind-erd
+
+entity categories{
+  *category_id : smallint <<pk>>
+  --
+  category_name : varchar(15)
+  description : text
+  picture : byte
+}
+
+entity products{
+    *product_id : smallint <<pk>>
+    --
+    product_name : varchar(40)
+    quantity_per_unit : varchar(20)
+    unit_price : real
+    units_in_stock : smallint
+    units_in_order : smallint
+    reorder_level : smallint
+    discontinued : integer
+    --
+    supplier_id : smallint <<fk>>
+    category_id : smallint <<fk>>
+}
+
+entity supplier{
+    supplier_id : smallint <<pk>>
+    --
+    company_name : varchar(40)
+    contact_name : varchar(30)
+    contact_title : varchar(30)
+    address : varchar(60)
+    city : varchar(15)
+    region : varchar(15)
+    postal_code : varchar(10)
+    country : varchar(15)
+    phone : varchar(24)
+    fax : varchar(24)
+    homepage : text
+}
+
+entity orders{
+    *order_id : smallint <<pk>>
+    --
+    order_date : date
+    required_date : date
+    shipped_date : date
+    freight : real
+    ship_name : varchar(40)
+    ship_address : varchar(60)
+    ship_city : varchar(15)
+    ship_region : varchar(15)
+    ship_postal_code : varchar(10)
+    ship_country : varchar(15)
+    --
+    employee_id : smallint <<fk>>
+    customer_id : smallint <<fk>>
+    ship_via : smallint <<fk>>
+}
+
+entity order_detail{
+    *order_id : smallint <<pk,fk>>
+    product_id : smallint <<pk,fk>>
+    --
+    unit_price : real
+    quantity : smallint
+    discount : real
+}
+
+entity customers{
+    *customer_id bpchar <<pk>>
+    --
+    company_name : varchar(40)
+    contact_name : varchar(30)
+    contact_title : varchar(30)
+    address : varchar(60)
+    city : varchar(15)
+    region : varchar(15)
+    postal_code : varchar(10)
+    country : varchar(15)
+    phone : varchar(24)
+    fax : varchar(24)
+}
+
+entity shippers
+{
+    *shipper_id : smallint <<pk>>
+    company_name : varchar(40)
+    phone : varchar(24)
+}
+
+entity employees{
+    employee_id smallint <<pk>>
+    --
+    last_name : varchar(20)
+    first_name : varchar(10)
+    title : varchar(30)
+    title_of_courtesy : varchar(25)
+    birth_date date
+    hire_date date
+    address : varchar(60)
+    city : varchar(15)
+    region : varchar(15)
+    postal_code : varchar(10)
+    country : varchar(15)
+    home_phone : varchar(24)
+    extension : varchar(4)
+    photo : bytea
+    notes : text
+    reports_to smallint
+    photo_path : varchar(255)
+}
+
+categories ||-right-|{ products
+supplier ||--|{ products
+products ||--|{ order_detail
+employees ||--|{ orders
+customers ||-left-|{ orders
+shippers ||--|{ orders
+orders ||--|{ order_detail
+@enduml
