@@ -1,0 +1,65 @@
+@startuml 08-payments
+
+
+
+entity entity_type{
+    enty_id serial <<pk>>
+    enty_name varchar(25) <<unique>> [e.g : BANK|FINTECH]
+}
+
+entity business_entity {
+    buty_id serial <<pk>>
+    --
+    buty_name varchar(15) <<unique>>[e.g:BCA|BNI|GOTO]
+    buty_code varchar(5) <<unique>>
+    buty_desc varchar(55)
+    --
+    buty_enty_id integer <<fk>>
+}
+
+entity users{
+    user_id serial <<pk>>
+    --
+    user_password varchar(125)
+    user_name varchar(35) <<unique>>
+    user_email varchar(35) <<unique>>
+    user_handphone varchar(15) <<unique>>
+    user_created_on datetime
+}
+
+entity user_accounts{
+    usac_id serial <<pk>>
+    --
+    usac_account_no varchar(30) <<unique>>
+    usac_balance decimal(18,2)
+    usac_created_on date
+    --
+    usac_buty_id integer<<fk>>
+    usac_user_id integer <<fk>>
+}
+
+entity transaction_type{
+    traty_id serial <<pk>>
+    traty_name varchar(25) [e.g: SETOR|TARIK|TOPTUP]
+}
+
+entity payment_transactions{
+    patrx_no varchar(55) <<pk>> [e.g:T170724-00001]
+    --
+    patrx_created_on datetime
+    patrx_debet decimal(18,2)
+    patrx_credit decimal(18,2)
+    patrx_notes varchar(125)
+    --
+    patrx_acctno_from varchar(30) <<fk>>
+    patrx_acctno_to varchar(30) <<fk>>
+    patrx_patrx_ref varchar(55) <<fk>>
+    patrx_traty_id integer <<fk>>
+}
+
+
+entity_type ||--|{ business_entity
+business_entity ||--|{ user_accounts
+users ||--|{ user_accounts
+transaction_type ||--|{ payment_transactions
+@enduml

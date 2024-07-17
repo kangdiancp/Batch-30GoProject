@@ -1,0 +1,98 @@
+@startuml northwind-erd
+
+entity categories{
+  *cate_id : serial <<pk>>
+  --
+  cate_name : varchar(15)
+  cate_description : text
+  cate_picture : byte
+  --
+  cate_cate_id : int <<fk>>
+}
+
+entity products{
+    *prod_id : serial <<pk>>
+    --
+    prod_name : varchar(40)
+    prod_description : varchar(512)
+    prod_plu : varchar(15) <<unique>>
+    prod_price : real
+    prod_stock : smallint
+    prod_expire_date : datetime
+    prod_photo : varchar(256)
+    --
+    prod_cate_id : smallint <<fk>>
+    prod_store_id : smallint <<fk>>
+}
+
+entity users{
+    *user_id : serial <<pk>>
+    --
+    user_handphone : varchar(40) <<unique>>
+    user_email : varchar(30) <<unique>>
+    user_gender : varchar(30)
+    user_birthday : varchar(60)
+    user_password : varchar(256)
+    user_ref_code : varchar(15)
+    user_email_verification : varchar(6)
+    user_status : varchar(15) [valid | invalid]
+}
+
+entity user_address {
+    *usad_id : serial <<pk>>
+    --
+    usad_address : varchar(256)
+    usad_region : varchar(256)
+    usad_cordinat : varchar(512)
+    usad_label : varchar(15)
+    usad_current_address : char(1)
+    --
+    usad_user_id :integer <<fk>>
+}
+
+entity stores{
+    *store_id : serial <<pk>>
+    store_name : varchar(25) <<unique>>
+    store_address : varchar(512) 
+}
+
+
+entity orders{
+    *order_id : serial <<pk>>
+    --
+    order_number : varchar(25) <<unique>>
+    order_date : date
+    order_expire_date : date
+    order_shipped_date : date
+    order_subtotal : smallint
+    order_discount : smallint
+    order_tax : smallint
+    order_total_payment : smallint
+    order_payment_type : varchar(15) [fintech|transfer|virtual account] 
+    order_ship_method : varchar(15) [Reguler | Sameday | Express]
+    --
+    order_user_id : int <<fk>>
+    order_store_id : int <<fk>>
+}
+
+entity order_detail{
+    *ordet_id : serial <<pk>>
+    --
+    ordet_unit_price : real
+    ordet_quantity : smallint
+    ordet_discount : real
+    --
+    ordet_order_id : int <<fk>>
+    ordet_prod_id : int <<fk>>
+}
+
+
+
+
+categories ||--|{ products
+products ||--|{ order_detail
+users ||-down-|{ orders
+stores ||-right-|{ orders
+users ||-left-|{ user_address
+orders ||--|{ order_detail
+@enduml
